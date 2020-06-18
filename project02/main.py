@@ -42,6 +42,10 @@ mode. When the game starts, the user should be prompted to choose between
 1-player or 2-player mode.
 
 """
+
+# This program uses curses, on windows install the library by
+# using 'pip install windows-curses'
+
 import curses
 import time
 from enum import Enum
@@ -180,6 +184,7 @@ while state == GameState.RUNNING:
                 guessedLetters[index] = letter
 
         if allLettersGuessed():
+            # Player 1 wins
             state = GameState.PLAYER2WINS
 
     else:
@@ -189,13 +194,14 @@ while state == GameState.RUNNING:
             # Player 1 wins
             state = GameState.PLAYER1WINS
 
-
 if state == GameState.PLAYER1WINS:
-    print("Player 1 wins!!!!")
-    stdscr.addstr(0, 0, "Player 1 wins!!!!", curses.A_BLINK)
+    stdscr.addstr(20, 18, "Player 1 wins!!!!")
 else:
-    stdscr.addstr(0, 0, "Player 2 wins!!!!", curses.A_BLINK)
+    stdscr.addstr(20, 18, "Player 2 wins!!!!")
 
-time.sleep(3)
-
+stdscr.refresh()
+time.sleep(2)
 curses.endwin()
+
+
+
