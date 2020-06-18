@@ -36,3 +36,16 @@ class Player:
 
     def __str__(self):
         return self.name
+
+
+class Rules:
+
+    def __init__(self):
+        self.rules = ""
+
+    def read_rules(self):
+        with open("cheatrules.txt", "r") as file:
+            self.rules = file.readlines()
+
+    def __str__(self):
+        return self.rules

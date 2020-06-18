@@ -44,17 +44,7 @@ the challenge. The exact flow of the challenge mechanism is up to you.
 """
 
 from enum import Enum
-from game import Deck, Player
-
-
-class Rules:
-
-    def __init__(self):
-        self.rules = ""
-
-    def read_rules(self):
-        with open("cheatrules", "r") as file:
-            self.rules = file.readlines()
+from game import Deck, Player, Card, Rules
 
 
 class GameEngine:
@@ -69,12 +59,27 @@ class GameEngine:
         self.current_player_index = -1
         self.players = []
         self.deck = Deck()
+        self.rules = Rules()
+
+    def initialize_game(self):
+        self.deck.build()
+        self.deck.shuffle()
+        self.rules.read_rules()
+        self.deal_cards()
 
     def create_players(self):
         number_players = int(input("Enter the number of players? "))
         for player_number in range(1, number_players + 1):
             name = input(f"Enter the name of player{player_number}? ")
             self.players.append(Player(name))
+
+    def deal_cards(self):
+        player_index = 0
+        for card in self.deck.cards:
+            self.players[player_index].hand.append(card)
+            player_index += 1
+            if player_index >= len(self.players):
+                player_index = 0
 
     def next_player(self):
         self.current_player_index += 1
@@ -94,8 +99,7 @@ class GameEngine:
                 f"{current_player_name} what do you want to do? ")
 
     def start_game(self):
-        self.deck.build()
-        self.deck.shuffle()
+        self.initialize_game()
         self.game_loop()
 
 
