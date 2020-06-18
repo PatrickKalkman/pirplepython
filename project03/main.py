@@ -42,3 +42,62 @@ The 2-player game should only start if one person has challenged the other
 the challenge. The exact flow of the challenge mechanism is up to you.
 
 """
+
+from enum import Enum
+from game import Deck, Player
+
+
+class Rules:
+
+    def __init__(self):
+        self.rules = ""
+
+    def read_rules(self):
+        with open("cheatrules", "r") as file:
+            self.rules = file.readlines()
+
+
+class GameEngine:
+
+    class States(Enum):
+        INIT = 1
+        PLAYING = 2
+        FINISHED = 3
+
+    def __init__(self):
+        self.state = self.States.INIT
+        self.current_player_index = -1
+        self.players = []
+        self.deck = Deck()
+
+    def create_players(self):
+        number_players = int(input("Enter the number of players? "))
+        for player_number in range(1, number_players + 1):
+            name = input(f"Enter the name of player{player_number}? ")
+            self.players.append(Player(name))
+
+    def next_player(self):
+        self.current_player_index += 1
+        if self.current_player_index >= len(self.players):
+            self.current_player_index = 0
+
+    def game_loop(self):
+        while self.state != self.States.FINISHED:
+            if self.state == self.States.INIT:
+                self.create_players()
+                self.state = self.States.PLAYING
+
+            self.next_player()
+
+            current_player_name = self.players[self.current_player_index]
+            self.command = input(
+                f"{current_player_name} what do you want to do? ")
+
+    def start_game(self):
+        self.deck.build()
+        self.deck.shuffle()
+        self.game_loop()
+
+
+game = GameEngine()
+game.start_game()

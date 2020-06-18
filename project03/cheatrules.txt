@@ -1,0 +1,26 @@
+Cheat
+
+One pack of 52 cars is used. All the cards are shuffled and dealt evenly between
+ the players. No cards should be left. 
+
+Players are allowed to look at their cards.
+
+A player's turn consists of discarding one or more cards face down, and
+calling out their rank - which may be a lie.
+
+The player who sits to the left of the dealer (clockwise) takes the first turn,
+and must call aces. The second player does the same, and must call twos.
+Play continues like this, increasing rank each time, with aces following kings.
+
+If any player thinks another player is lying, they can call the player out by
+shouting "Cheat", and the cards in question are revealed to all players.
+If the accused player was indeed lying, they have to take the whole pile of
+cards into their hand. If the player was not lying, the caller must take the
+pile into their hand. Once the next player has placed cards, however, it is too
+late to call out any previous players.
+
+The game ends when any player runs out of cards, at which point they win.
+
+The game starts with entering both players name. These instructions can be
+viewed by typing "--help". The game can be resumed by typing "--resume".
+
