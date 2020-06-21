@@ -44,7 +44,7 @@ the challenge. The exact flow of the challenge mechanism is up to you.
 """
 
 from enum import Enum
-from game import Deck, Player, Card, Rules
+from game import Deck, Player, Card, Rules, Stack
 
 
 class GameEngine:
@@ -60,18 +60,22 @@ class GameEngine:
         self.players = []
         self.deck = Deck()
         self.rules = Rules()
+        self.stack = Stack()
 
     def initialize_game(self):
         self.deck.build()
         self.deck.shuffle()
         self.rules.read_rules()
-        self.deal_cards()
 
     def create_players(self):
         number_players = int(input("Enter the number of players? "))
         for player_number in range(1, number_players + 1):
-            name = input(f"Enter the name of player{player_number}? ")
+            player_question = f"Enter the name of player{player_number}? "
+            name = input(player_question)
             self.players.append(Player(name))
+
+    def current_player(self):
+        return self.players[self.current_player_index]
 
     def deal_cards(self):
         player_index = 0
@@ -86,17 +90,26 @@ class GameEngine:
         if self.current_player_index >= len(self.players):
             self.current_player_index = 0
 
+    def print_rules(self):
+        print(self.rules)
+
     def game_loop(self):
         while self.state != self.States.FINISHED:
             if self.state == self.States.INIT:
                 self.create_players()
+                self.deal_cards()
                 self.state = self.States.PLAYING
 
             self.next_player()
 
-            current_player_name = self.players[self.current_player_index]
-            self.command = input(
-                f"{current_player_name} what do you want to do? ")
+            command = input((f"{self.current_player()} what do you want to do?"
+                             " (help, playcard, cheat) "))
+
+            if command == "help":
+                self.print_rules()
+            elif command == "playcard":
+                callCard = input("Which card do you want to play? ")
+                card = self.current_player().get_card(callCard)
 
     def start_game(self):
         self.initialize_game()

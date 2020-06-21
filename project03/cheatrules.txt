@@ -24,3 +24,9 @@ The game ends when any player runs out of cards, at which point they win.
 The game starts with entering both players name. These instructions can be
 viewed by typing "--help". The game can be resumed by typing "--resume".
 
+
+
+A set of guidelines for GreenBox and one clear version of the definition-of-done should be written. 
+These documents are the basis for reviewing session, which should also be incorporated 
+into the quality assurance process.
+

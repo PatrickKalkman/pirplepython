@@ -1,4 +1,19 @@
 import random
+import functools as ft
+
+
+class Stack:
+    def __init__(self):
+        self.cards = []
+
+    def add_card(self, card):
+        self.cards.append(card)
+
+    def get_cards(self):
+        return self.cards
+
+    def clear(self):
+        self.cards.clear()
 
 
 class Deck:
@@ -13,11 +28,11 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.cards)
 
+    def combine(self, card1, card2):
+        return card1 + card2 + '\n'
+
     def __str__(self):
-        deck_string = ""
-        for card in self.cards:
-            deck_string += card.__str__() + '\n'
-        return deck_string
+        return ft.reduce(self.combine, self.cards)
 
 
 class Card:
@@ -37,6 +52,9 @@ class Player:
     def __str__(self):
         return self.name
 
+    def get_card(self, card_string):
+        return self.hand[0]
+
 
 class Rules:
 
@@ -48,4 +66,4 @@ class Rules:
             self.rules = file.readlines()
 
     def __str__(self):
-        return self.rules
+        return ''.join(self.rules)
