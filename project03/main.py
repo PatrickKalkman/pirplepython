@@ -56,7 +56,7 @@ class GameEngine:
 
     def __init__(self):
         self.state = self.States.INIT
-        self.current_player_index = -1
+        self.current_player_index = 0
         self.players = []
         self.deck = Deck()
         self.rules = Rules()
@@ -100,16 +100,25 @@ class GameEngine:
                 self.deal_cards()
                 self.state = self.States.PLAYING
 
-            self.next_player()
-
-            command = input((f"{self.current_player()} what do you want to do?"
+            print(f"{self.current_player().name} it is your turn")
+            # print the hand of the current player
+            print(self.current_player())
+            
+            command = input((f"What do you want to do?"
                              " (help, playcard, cheat) "))
+
 
             if command == "help":
                 self.print_rules()
             elif command == "playcard":
-                callCard = input("Which card do you want to play? ")
-                card = self.current_player().get_card(callCard)
+                call_card = input(("Which card do you want to play " 
+                    "(eg. 2:Spades, King:Hearts)? "))
+                if self.current_player().has_card(call_card):
+                    card = self.current_player().get_card(call_card)
+                    self.stack.add_card(card)
+                    self.next_player()
+                else: 
+                    print("You don't have that card")
 
     def start_game(self):
         self.initialize_game()

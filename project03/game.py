@@ -23,7 +23,7 @@ class Deck:
     def build(self):
         for suit in ["Spades", "Clubs", "Diamonds", "Hearts"]:
             for value in range(1, 14):
-                self.cards.append(Card(suit, value))
+                self.cards.append(Card(suit, str(value)))
 
     def shuffle(self):
         random.shuffle(self.cards)
@@ -40,6 +40,10 @@ class Card:
         self.suit = suit
         self.value = value
 
+    def __eq__(self, other):
+        return self.suit.lower() == other.suit.lower() and \
+                self.value.lower() == other.value.lower()
+
     def __str__(self):
         return f"{self.value}:{self.suit}"
 
@@ -50,11 +54,35 @@ class Player:
         self.hand = []
 
     def __str__(self):
-        return self.name
+        player = f"Your cards: ("
+        for card in self.hand:
+            player += f"{card}, "
+
+        player += ") \n"
+        return player
 
     def get_card(self, card_string):
-        return self.hand[0]
+        splitted_card = card_string.split(':')
+        if len(splitted_card) != 2:
+            return None
+        else:
+            selected_card = Card(splitted_card[1], splitted_card[0])
+            found_card = None
+            for card in self.hand:
+                if card == selected_card:
+                    found_card = card
+                    self.hand.remove(card)
 
+            return found_card
+
+    def has_card(self, card_string):
+        splitted_card = card_string.split(':')
+        if len(splitted_card) != 2:
+            return False
+        else:
+            card = Card(splitted_card[1], splitted_card[0])
+            return any(c for c in self.hand if c == card)
+            
 
 class Rules:
 
