@@ -103,21 +103,20 @@ class GameEngine:
             print(f"{self.current_player().name} it is your turn")
             # print the hand of the current player
             print(self.current_player())
-            
+
             command = input((f"What do you want to do?"
                              " (help, playcard, cheat) "))
-
 
             if command == "help":
                 self.print_rules()
             elif command == "playcard":
-                call_card = input(("Which card do you want to play " 
-                    "(eg. 2:Spades, King:Hearts)? "))
+                call_card = input(("Which card do you want to play "
+                                   "(eg. 2:Spades, King:Hearts)? "))
                 if self.current_player().has_card(call_card):
                     card = self.current_player().get_card(call_card)
                     self.stack.add_card(card)
                     self.next_player()
-                else: 
+                else:
                     print("You don't have that card")
 
     def start_game(self):

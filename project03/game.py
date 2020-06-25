@@ -2,6 +2,7 @@ import random
 import functools as ft
 
 
+# The Stack contains the cards that each player plays.
 class Stack:
     def __init__(self):
         self.cards = []
@@ -42,7 +43,7 @@ class Card:
 
     def __eq__(self, other):
         return self.suit.lower() == other.suit.lower() and \
-                self.value.lower() == other.value.lower()
+            self.value.lower() == other.value.lower()
 
     def __str__(self):
         return f"{self.value}:{self.suit}"
@@ -71,8 +72,8 @@ class Player:
             for card in self.hand:
                 if card == selected_card:
                     found_card = card
-                    self.hand.remove(card)
 
+            self.hand.remove(found_card)
             return found_card
 
     def has_card(self, card_string):
@@ -82,7 +83,7 @@ class Player:
         else:
             card = Card(splitted_card[1], splitted_card[0])
             return any(c for c in self.hand if c == card)
-            
+
 
 class Rules:
 
