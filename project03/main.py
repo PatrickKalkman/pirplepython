@@ -44,11 +44,11 @@ the challenge. The exact flow of the challenge mechanism is up to you.
 """
 
 from enum import Enum
-from game import Deck, Player, Card, Rules, Stack
+
+from game import Deck, Player, Rules, Stack
 
 
 class GameEngine:
-
     class States(Enum):
         INIT = 1
         PLAYING = 2
@@ -61,6 +61,7 @@ class GameEngine:
         self.deck = Deck()
         self.rules = Rules()
         self.stack = Stack()
+        self.cheat_card = ""
 
     def initialize_game(self):
         self.deck.build()
@@ -86,9 +87,19 @@ class GameEngine:
                 player_index = 0
 
     def next_player(self):
+        if self.current_player().no_more_cards():
+            print(f"{self.current_player().name} won the game!!!!!")
+            self.state = self.States.FINISHED
+
         self.current_player_index += 1
         if self.current_player_index >= len(self.players):
             self.current_player_index = 0
+
+    def previous_player(self):
+        if self.current_player_index > 0:
+            return self.players[self.current_player_index - 1]
+        else:
+            return self.players[len(self.players) - 1]
 
     def print_rules(self):
         print(self.rules)
@@ -101,23 +112,48 @@ class GameEngine:
                 self.state = self.States.PLAYING
 
             print(f"{self.current_player().name} it is your turn")
-            # print the hand of the current player
+            print(self.stack)
             print(self.current_player())
 
-            command = input((f"What do you want to do?"
-                             " (help, playcard, cheat) "))
+            command = input((f"What do you want to do?" " (help, playcard, cheater) "))
 
             if command == "help":
                 self.print_rules()
             elif command == "playcard":
-                call_card = input(("Which card do you want to play "
-                                   "(eg. 2:Spades, King:Hearts)? "))
+                call_card = input("Which card do you want to play? ")
                 if self.current_player().has_card(call_card):
                     card = self.current_player().get_card(call_card)
                     self.stack.add_card(card)
+                    self.cheat_card = input(
+                        ("What card do you " "want to say you " "played? ")
+                    )
                     self.next_player()
                 else:
                     print("You don't have that card")
+            elif command == "cheater":
+                lastcard = self.stack.get_last_card()
+                print(f"Last card was: {lastcard}")
+                if self.cheat_card == str(lastcard):
+                    print(
+                        (
+                            f"No, {self.previous_player().name} did not cheat, "
+                            "you will get all the played cards"
+                        )
+                    )
+                    played_cards = self.stack.get_cards()
+                    self.current_player().add(played_cards)
+                    self.stack.clear()
+                else:
+                    print(
+                        (
+                            f"Yes, you are right {self.previous_player().name} "
+                            f"cheated. {self.previous_player().name} will get "
+                            "all played cards"
+                        )
+                    )
+                    played_cards = self.stack.get_cards()
+                    self.previous_player().add(played_cards)
+                    self.stack.clear()
 
     def start_game(self):
         self.initialize_game()
